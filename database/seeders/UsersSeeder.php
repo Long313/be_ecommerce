@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 class UsersSeeder extends Seeder
@@ -21,9 +21,10 @@ class UsersSeeder extends Seeder
         $user->email = 'admin@gmail.com';
         $user->phone_number = '0123456789';
         $user->username = 'admin';
+        // $user->password = Hash::make('12345678'); // Mã hóa mật khẩu
         $user->password = bcrypt('12345678'); // Mã hóa mật khẩu
         $user->role = 'admin';
-        $user->refresh_token = Str::random(60); // Tạo refresh token ngẫu nhiên
+        $user->refresh_token = ''; // Tạo refresh token ngẫu nhiên
         $user->created_at = now();
         $user->created_by = '18e00d22-0eb6-4005-9589-5ddcae1986b3'; // Giả sử người tạo là chính mình
         $user->updated_at = now();
