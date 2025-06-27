@@ -174,22 +174,16 @@ return [
     |
     */
     "security_schemes" => [
-        // "authorization" => [
-        //     "type" => "apiKey",
-        //     "name" => "authorization",
-        //     "in" => "header"
-        // ],
-        // "apiKey1" => [
-        //     "type" => "apiKey",
-        //     "name" => "key1",
-        //     "in" => "query"
-        // ]
         "authorization" => [
-            "type" => "http",
-            "scheme" => "bearer",
-            "bearerFormat" => "JWT",
+            "type" => "apiKey",
+            "name" => "authorization",
             "in" => "header"
         ],
+        "apiKey1" => [
+            "type" => "apiKey",
+            "name" => "key1",
+            "in" => "query"
+        ]
     ],
 
     /*

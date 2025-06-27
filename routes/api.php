@@ -1,16 +1,41 @@
 <?php
 
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductController;
 
-// Route::apiResource('user', UserController::class);
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "api" middleware group. Make something great!
+|
+*/
+
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'auth'
+], function ($router) {
+    Route::post('login', [AuthController::class, 'login'])->summary('User login.');
+    Route::get('profile', [AuthController::class, 'profile'])->summary("User's profile.");
+    Route::post('logout', [AuthController::class, 'logout'])->summary('User logout.');
+    // Route::post('refresh', 'AuthController@refresh');
+});
+
 
 #/ Define API routes for UserController
 Route::get('user', [UserController::class, 'getUsers'])->summary('Get users');
 Route::get('user/{id}', [UserController::class, 'getUserById'])->summary('Get user by ID');
-Route::post('user', [UserController::class, 'createUser'])->summary('Create a new user');
+Route::post('user/customer', [UserController::class, 'createCustomerUser'])->summary('Create a new customer user');
 Route::put('user', [UserController::class, 'updateUser'])->summary('Update an user');
 Route::delete('user', [UserController::class, 'deleteUser'])->summary('Delete an user');
 
