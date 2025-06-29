@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('description', 255);
             $table->double('price');
             $table->enum('category', ['shoes', 'shirts', 'trousers', 'shorts', 'skirts', 'socks', 'accessories']);
-            $table->enum('gender', ['men', 'women', 'unisex']);
+            $table->enum('gender', ['men', 'women', 'unisex'])->default('unisex');
             $table->integer('discount_rate')->unsigned()->default(0);
             $table->integer('tax_rate')->unsigned()->default(10);
             $table->bigInteger('inventory_count')->unsigned();

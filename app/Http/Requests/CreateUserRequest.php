@@ -27,6 +27,7 @@ class CreateUserRequest extends FormRequest
             'email' => 'required|email|unique:users',
             'phone_number' => 'required|max:20|unique:users',
             'fullname' => 'required',
+            'gender' => 'required'
         ];
     }
 
@@ -48,7 +49,8 @@ class CreateUserRequest extends FormRequest
             'email' => 'Email',
             'phone_number' => 'Phone number',
             'username' => 'Username',
-            'password' => 'Password'
+            'password' => 'Password',
+            'gender' => 'Gender'
         ];
     }
 }

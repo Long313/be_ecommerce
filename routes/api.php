@@ -28,7 +28,7 @@ Route::group([
     Route::post('login', [AuthController::class, 'login'])->summary('User login.');
     Route::get('profile', [AuthController::class, 'profile'])->summary("User's profile.");
     Route::post('logout', [AuthController::class, 'logout'])->summary('User logout.');
-    // Route::post('refresh', 'AuthController@refresh');
+    Route::post('refresh', [AuthController::class, 'refresh'])->summary('User refresh token.');
 });
 
 
