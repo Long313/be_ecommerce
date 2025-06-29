@@ -68,14 +68,13 @@ class UserController extends Controller
             $user->refresh_token = '';
             $user->save();
             return response()->json([
-                'success' => true,
-                // 'data' => $user,
-                'message' => 'User created successfully',
-            ], 201);
+                'status' => 200,
+                'message' => 'Success',
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
-                'success' => false,
-                'message' => 'User created unsuccessfully',
+                'status' => 500,
+                'message' => 'Fail',
             ], 500);
         }
     }

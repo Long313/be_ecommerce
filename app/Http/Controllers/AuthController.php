@@ -81,7 +81,7 @@ class AuthController extends Controller
         
         $decodeAccessToken = JWTAuth::getJWTProvider()->decode($accessToken);
         
-        $user = User::find($decodeAccessToken['sub']);
+        $user = User::find($decodeAccessToken['user_id']);
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
@@ -92,7 +92,10 @@ class AuthController extends Controller
 
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json([
+            'status' => 200,
+            'message' => 'Success'
+        ], 200);
     }
 
     /**
@@ -146,12 +149,18 @@ class AuthController extends Controller
      */
     private function respondWithToken($token, $refreshToken)
     {
+        $accessCookie = cookie(
+            'access_token', $token, 60, null, null, true, true, false, 'Strict'
+        );
+        
+        $refreshCookie = cookie(
+            'refresh_token', $refreshToken, 60 * 24 * 7, null, null, true, true, false, 'Strict'
+        );
+
         return response()->json([
-            'access_token' => $token,
-            'refresh_token' => $refreshToken,
-            'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60
-        ]);
+            'status' => 200,
+            'message' => 'Success'
+        ], 200)->withCookie($accessCookie)->withCookie($refreshCookie);
     }
 
     private function createRefreshToken() {
