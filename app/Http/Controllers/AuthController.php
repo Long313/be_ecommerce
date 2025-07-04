@@ -39,7 +39,7 @@ class AuthController extends Controller
 
         $refreshToken = $this->createRefreshToken();
 
-        $user = User::where('email', request()->email)->first();
+        $user = User::where('email', request()->email)->where('status', 'active')->first();
 
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);

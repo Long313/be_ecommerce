@@ -20,10 +20,9 @@ class UsersSeeder extends Seeder
         $user->fullname = 'Admin';
         $user->email = 'admin@gmail.com';
         $user->phone_number = '0123456789';
-        $user->username = 'admin';
-        // $user->password = Hash::make('12345678'); // Mã hóa mật khẩu
-        $user->password = bcrypt('12345678'); // Mã hóa mật khẩu
+        $user->password = Hash::make('12345678'); // Mã hóa mật khẩu
         $user->role = 'admin';
+        $user->status = 'active';
         $user->gender = 'unisex';
         $user->refresh_token = ''; // Tạo refresh token ngẫu nhiên
         $user->created_at = now();

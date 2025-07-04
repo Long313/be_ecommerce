@@ -18,7 +18,7 @@ class ProductsSeeder extends Seeder
         // $product->id = Str::uuid()->toString();
         $product->id = '74789b18-7717-4617-aa2d-42fa113857ce'; // ID sản phẩm, có thể thay đổi nếu cần
         $product->name = 'Product 1';
-        $product->description = 'Description for Product 1';
+        $product->description = 'hot';
         $product->price = 50.00; // Giá sản phẩm
         $product->category = 'shoes'; // Danh mục sản phẩm
         $product->gender = 'unisex'; // Giới tính sản phẩm

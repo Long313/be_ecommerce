@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateUserRequest extends FormRequest
+class ResendOtpRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,7 @@ class CreateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-            'phone_number' => 'required|max:20|unique:users',
+            'email' => 'required|email',
         ];
     }
 
@@ -32,9 +30,6 @@ class CreateUserRequest extends FormRequest
     {
         return [
             'required' => ':attribute must be filled',
-            'unique' => ':attribute is duplicated',
-            'min' => ':attribute minimum :min characters',
-            'max' => ':attribute maximum :max characters',
             'email' => ':attribute must be email format',
         ];
     }
@@ -43,8 +38,6 @@ class CreateUserRequest extends FormRequest
     {
         return [
             'email' => 'Email',
-            'password' => 'Password',
-            'phone_number' => 'Phone number',
         ];
     }
 }
