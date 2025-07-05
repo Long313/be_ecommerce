@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('otp');
             $table->string('purpose');
+            $table->string('reset_token');
             $table->timestamp('expired_at');
             $table->timestamp('created_at')->nullable();
             $table->uuid('created_by')->nullable();
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->uuid('updated_by')->nullable();
             $table->timestamp('deleted_at')->nullable();
             $table->uuid('deleted_by')->nullable();
+            $table->unique(['email', 'purpose']);
         });
     }
 

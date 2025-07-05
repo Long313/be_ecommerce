@@ -8,10 +8,10 @@
 </head>
 <body>
     <p>Dear Customer,</p>
-    <p>Thank you for signing up!</p>
-    <p>To complete your registration, please use the following One-Time Password (OTP):</p>
+    <p>We received a request to reset your password.</p>
+    <p>To proceed, please use the following One-Time Password (OTP):</p>
     <h2>***[ {{$otp}} ]***</h2>
-    <p>This code will expire in 5 minutes. If you did not initiate this request, please ignore this email.</p>
+    <p>This code will expire in 5 minutes. If you did not request a password reset, please ignore this email.</p>
     <p>If you need any help, feel free to contact our support team.</p>
     Best regards,  
     <br>

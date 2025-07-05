@@ -10,6 +10,7 @@ use G4T\Swagger\Attributes\SwaggerSection;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 
 #[SwaggerSection('APIs for Auth')]
 class AuthController extends Controller
@@ -31,19 +32,19 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
+        $user = User::where('email', $request->email)->where('status', 'active')->first();
+
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
         $credentials = request(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $refreshToken = $this->createRefreshToken();
-
-        $user = User::where('email', request()->email)->where('status', 'active')->first();
-
-        if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
-        }
+        $refreshToken = $this->createRefreshToken();        
 
         $user->refresh_token = $refreshToken;
 
@@ -82,6 +83,7 @@ class AuthController extends Controller
         $decodeAccessToken = JWTAuth::getJWTProvider()->decode($accessToken);
         
         $user = User::find($decodeAccessToken['user_id']);
+
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
@@ -92,10 +94,7 @@ class AuthController extends Controller
 
         auth()->logout();
 
-        return response()->json([
-            'status' => 200,
-            'message' => 'Success'
-        ], 200);
+        return response()->json(['status' => 200, 'message' => 'Success'], 200);
     }
 
     /**
@@ -105,25 +104,26 @@ class AuthController extends Controller
      */
     public function refresh(RefreshTokenRequest $request)
     {
-        $refreshToken = request()->refreshToken;
-
         $authHeader = request()->header('Authorization');
 
         $accessToken = Str::replaceFirst('Bearer ', '', $authHeader);
 
         try {
-            $decodeRefreshToken = JWTAuth::getJWTProvider()->decode($refreshToken);
+            $decodeRefreshToken = JWTAuth::getJWTProvider()->decode($request->refreshToken);
             
             $decodeAccessToken = JWTAuth::getJWTProvider()->decode($accessToken);
             if ($decodeAccessToken) {
                  auth('api')->invalidate();
             }
             
-            $user = User::find($decodeRefreshToken['user_id']);
+            // $user = User::find($decodeRefreshToken['user_id']);
+            $user = User::where('id', $decodeRefreshToken['user_id'])->where('status', 'active')->first();
+
             if (!$user) {
                 return response()->json(['error' => 'User not found'], 404);
             }
-            if ($user->refresh_token !== $refreshToken) {
+            
+            if ($user->refresh_token !== $request->refreshToken) {
                 return response()->json(['error' => 'Refresh Token Invalid'], 500);
             }
             
@@ -135,7 +135,8 @@ class AuthController extends Controller
             $user->save();
 
             return $this->respondWithToken($newAccessToken, $newRefreshToken);
-        } catch (JWTException $exception) {
+        } catch (JWTException $e) {
+            Log::error($e);
             return response()->json(['error' => 'Refresh Token Invalid'], 500);
         }
     }

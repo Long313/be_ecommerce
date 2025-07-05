@@ -36,9 +36,11 @@ Route::group([
 Route::get('user', [UserController::class, 'getUsers'])->summary('Get users');
 Route::get('user/{id}', [UserController::class, 'getUserById'])->summary('Get user by ID');
 Route::post('user/customer', [UserController::class, 'createCustomerUser'])->summary('Create a new user (customer)');
-Route::post('user/verify-otp-register', [UserController::class, 'verifyOtpToRegister'])->summary('Verify OTP to register new account');
-Route::post('user/resend-otp-register', [UserController::class, 'resendOtpToRegister'])->summary('Resend OTP to register new account');
+Route::post('user/forgot-password', [UserController::class, 'forgotPassword'])->summary('Forgot password');
+Route::post('user/reset-password', [UserController::class, 'resetPassword'])->summary('Reset password');
+Route::post('user/verify-otp-register', [UserController::class, 'verifyOtpToRegister'])->summary('Verify OTP to complete registration');
 Route::post('user/verify-otp-reset', [UserController::class, 'verifyOtpToResetPassword'])->summary('Verify OTP to reset password');
+Route::post('user/resend-otp', [UserController::class, 'resendOtp'])->summary('Resend OTP email');
 Route::put('user', [UserController::class, 'updateUser'])->summary('Update an user');
 Route::delete('user', [UserController::class, 'deleteUser'])->summary('Delete an user');
 
