@@ -22,9 +22,9 @@ class CreateUserRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email',
             'password' => 'required|min:6',
-            'phone_number' => 'required|max:20|unique:users',
+            'phoneNumber' => 'required|max:20',
         ];
     }
 
@@ -32,7 +32,6 @@ class CreateUserRequest extends FormRequest
     {
         return [
             'required' => ':attribute must be filled',
-            'unique' => ':attribute is duplicated',
             'min' => ':attribute minimum :min characters',
             'max' => ':attribute maximum :max characters',
             'email' => ':attribute must be email format',
@@ -44,7 +43,7 @@ class CreateUserRequest extends FormRequest
         return [
             'email' => 'Email',
             'password' => 'Password',
-            'phone_number' => 'Phone number',
+            'phoneNumber' => 'Phone number',
         ];
     }
 }

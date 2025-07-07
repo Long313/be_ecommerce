@@ -72,9 +72,22 @@ class UserController extends Controller
      */
     public function createCustomerUser(CreateUserRequest $request) {
         try {
+            $existUser = User::where('email', $request->email)->orWhere('phone_number', $request->phoneNumber)->first();
+
+            if ($existUser) {
+                if ($existUser->email === $request->email) {
+                    return response()->json(['status' => 400, 'message' => 'Email is already registered',], 400);
+                }
+
+                if ($existUser->phone_number === $request->phoneNumber) {
+                    return response()->json(['status' => 400, 'message' => 'Phone number is already registered',], 400);
+                }
+            }
+
             $user = new User;
-            $user->fill($request->all());
             $user->id = Str::uuid()->toString();
+            $user->email = $request->email;
+            $user->phone_number = $request->phoneNumber;
             $user->fullname = 'default full name';
             $user->password = Hash::make($request->password);
             $user->role = 'customer';
@@ -185,9 +198,9 @@ class UserController extends Controller
 
             $subject = '[Amax] - Your OTP Code';
 
-            if ($request->purpose == 'register') {
+            if ($request->purpose === 'register') {
                 $subject = '[Amax] - Your OTP Code to Complete Registration';
-            } else if ($request->purpose == 'reset') {
+            } else if ($request->purpose === 'reset') {
                 $subject = '[Amax] - Your OTP Code to Reset Password';
             }
                 
@@ -321,9 +334,9 @@ class UserController extends Controller
 
     private function sendOtpEmail($toEmail, $subject, $otp, $purpose) {
         try {
-            if ($purpose == 'register') {
+            if ($purpose === 'register') {
                 Mail::to($toEmail)->send(new OtpEmailToRegister($subject, $otp));
-            } else if ($purpose == 'reset') {
+            } else if ($purpose === 'reset') {
                 Mail::to($toEmail)->send(new OtpEmailToResetPassword($subject, $otp));
             }
         } catch (\Exception $e) {
