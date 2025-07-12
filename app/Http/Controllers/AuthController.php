@@ -35,13 +35,13 @@ class AuthController extends Controller
         $user = User::where('email', $request->email)->where('status', 'active')->first();
 
         if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
+            return response()->json(['status' => 400, 'message' => 'Wrong credentials',], 400);
         }
 
         $credentials = request(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['status' => 400, 'message' => 'Wrong credentials',], 400);
         }
 
         $refreshToken = $this->createRefreshToken();        
@@ -85,7 +85,7 @@ class AuthController extends Controller
         $user = User::find($decodeAccessToken['user_id']);
 
         if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
+            return response()->json(['status' => 404, 'message' => 'User not found'], 404);
         }
         
         $user->refresh_token = '';
@@ -116,15 +116,14 @@ class AuthController extends Controller
                  auth('api')->invalidate();
             }
             
-            // $user = User::find($decodeRefreshToken['user_id']);
             $user = User::where('id', $decodeRefreshToken['user_id'])->where('status', 'active')->first();
 
             if (!$user) {
-                return response()->json(['error' => 'User not found'], 404);
+                return response()->json(['status' => 404, 'message' => 'User not found'], 404);
             }
             
             if ($user->refresh_token !== $request->refreshToken) {
-                return response()->json(['error' => 'Refresh Token Invalid'], 500);
+                return response()->json(['status' => 500, 'message' => 'Refresh Token Invalid'], 500);
             }
             
             $newAccessToken = auth()->login($user);
@@ -137,7 +136,7 @@ class AuthController extends Controller
             return $this->respondWithToken($newAccessToken, $newRefreshToken);
         } catch (JWTException $e) {
             Log::error($e);
-            return response()->json(['error' => 'Refresh Token Invalid'], 500);
+            return response()->json(['status' => 500, 'message' => 'Refresh Token Invalid'], 500);
         }
     }
 
