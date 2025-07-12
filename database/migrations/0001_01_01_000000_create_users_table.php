@@ -16,9 +16,10 @@ return new class extends Migration
             $table->string('fullname', 100);
             $table->string('email')->unique();
             $table->string('phone_number', 20)->unique();
-            $table->string('username', 100)->unique();
             $table->string('password');
+            $table->enum('gender', ['men', 'women', 'unisex'])->default('unisex');
             $table->enum('role', ['admin', 'customer']);
+            $table->string('status');
             $table->string('refresh_token');
             $table->timestamp('created_at')->nullable();
             $table->uuid('created_by')->nullable();

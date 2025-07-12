@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateUserRequest extends FormRequest
+class VerifyOtpRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,8 +23,7 @@ class CreateUserRequest extends FormRequest
     {
         return [
             'email' => 'required|email',
-            'password' => 'required|min:6',
-            'phoneNumber' => 'required|max:20',
+            'otp' => 'required|min:4|max:4',
         ];
     }
 
@@ -42,8 +41,7 @@ class CreateUserRequest extends FormRequest
     {
         return [
             'email' => 'Email',
-            'password' => 'Password',
-            'phoneNumber' => 'Phone number',
+            'otp' => 'OTP'
         ];
     }
 }
