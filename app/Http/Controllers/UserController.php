@@ -264,7 +264,7 @@ class UserController extends Controller
                 return response()->json(['status' => 404, 'message' => 'User not found',], 404);
             }
 
-            $resetToken = urldecode($request->resetToken);
+            $resetToken = $request->cookie('reset_token');
 
             $decoded = base64_decode($resetToken);
 
