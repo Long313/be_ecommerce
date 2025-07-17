@@ -5,16 +5,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #822FFF;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    p {
+      color: #333333;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .otp {
+      display: inline-block;
+      padding: 12px 20px;
+      background-color: #FF35C4;
+      color: white;
+      font-size: 20px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+    .footer {
+      font-size: 14px;
+      color: #000000;
+      margin-top: 30px;
+    }
+    img {
+        width: 50px;
+    }
+  </style>
 </head>
 <body>
-    <p>Dear Customer,</p>
-    <p>Thank you for signing up!</p>
-    <p>To complete your registration, please use the following One-Time Password (OTP):</p>
-    <h2>***[ {{$otp}} ]***</h2>
-    <p>This code will expire in 5 minutes. If you did not initiate this request, please ignore this email.</p>
-    <p>If you need any help, feel free to contact our support team.</p>
-    Best regards,  
-    <br>
-    The Amax Team
+  <div class="container">
+    <h1>Your OTP Verification Code</h1>
+    <p>Dear customer,</p>
+    <p>
+      Thank you for signing up with us. To verify your email, please enter the following:
+    </p>
+
+    <div class="otp">{{$otp}}</div>
+
+    <p>
+      This OTP is valid for <strong>5 minutes</strong> from the receipt of this email.
+    </p>
+
+    <p class="footer">
+      Best regards,<br>
+      The Amax team <br>
+      <image src="image/LOGO.png" > </image>
+    </p>
+  </div>
 </body>
 </html>
