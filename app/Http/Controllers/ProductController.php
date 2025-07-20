@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Models\OrderItem;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use G4T\Swagger\Attributes\SwaggerSection;
@@ -135,6 +136,41 @@ class ProductController extends Controller
             $product->is_active = $request->isActive;
             $product->updated_by = $loginInfo['userId'];
             $product->save();
+
+            return response()->json(['status' => 200, 'message' => 'Success',], 200);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return response()->json([
+                'status' => 500,
+                'message' => 'Fail',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function deleteProduct($id) {
+        $loginInfo = $this->checkAdminLogin();
+
+        if (!$loginInfo['isAdmin']) {
+            return response()->json(['status' => 403, 'message' => 'Unauthorized',], 403);
+        }
+
+        $product = Product::findOrFail($id);
+
+        if (!$product) {
+            return response()->json(['status' => 404, 'message' => 'Product not found',], 404);
+        }
+
+        $orderItem = OrderItem::where('product_id', $id)->first();
+
+        if ($orderItem) {
+            return response()->json(['status' => 400, 'message' => 'Product is used. Can not delete',], 400);
+        }
+
+        try {
+            $product->deleted_by = $loginInfo['userId'];
+            $product->save();
+            $product->delete();
 
             return response()->json(['status' => 200, 'message' => 'Success',], 200);
         } catch (\Exception $e) {

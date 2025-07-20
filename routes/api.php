@@ -54,4 +54,5 @@ Route::group([
     Route::get('{id}', [ProductController::class, 'getProductById'])->summary('Get product by ID');
     Route::post('create', [ProductController::class, 'createProduct'])->summary('Create a new product');
     Route::put('update', [ProductController::class, 'updateProduct'])->summary('Update a product');
+    Route::delete('{id}', [ProductController::class, 'deleteProduct'])->summary('Delete an unused product');
 });
