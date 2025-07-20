@@ -2,70 +2,170 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use G4T\Swagger\Attributes\SwaggerSection;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
+use Tymon\JWTAuth\Facades\JWTAuth;
+
+
 
 #[SwaggerSection('APIs for Products')]
 class ProductController extends Controller
-{
-    public function getProducts()
-    {
+{   
+    public function getProducts(Request $request) {
         try {
-            $products = Product::all();
+            $search = $request->query('search', '');
+            $pageSize = $request->query('pageSize', 5);
+            $pageIndex = $request->query('pageIndex', 1);
+            $sortOrder = $request->query('sort', 'desc');
+
+            $query = Product::query();
+
+            if ($search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%$search%")
+                    ->orWhere('description', 'LIKE', "%$search%");
+                });
+            }
+
+            $query->orderBy('created_at', $sortOrder);
+
+            $products = $query->paginate($pageSize, ['*'], 'page', $pageIndex);
 
             return response()->json([
-                'success' => true,
-                'data' => $products,
-                'message' => 'Data retrieved successfully',
-            ]);
+                'status' => 200,
+                'data' => $products->items(),
+                'pagination' => [
+                    'current_page' => $products->currentPage(),
+                    'per_page' => $products->perPage(),
+                    'total' => $products->total(),
+                ],
+                'message' => 'Success',
+            ], 200);
         } catch (\Exception $e) {
+            Log::error($e);
             return response()->json([
-                'success' => false,
-                'message' => 'Failed to retrieve data',
+                'status' => 500,
+                'message' => 'Fail',
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
 
-    public function getProductById($id)
-    {
+    public function getProductById($id) {
         try {
             $product = Product::findOrFail($id);
 
             return response()->json([
-                'success' => true,
+                'status' => 200,
                 'data' => $product,
-                'message' => 'Data retrieved successfully',
-            ]);
+                'message' => 'Success',
+            ], 200);
         } catch (\Exception $e) {
+            Log::error($e);
             return response()->json([
-                'success' => false,
-                'message' => 'Failed to retrieve data',
+                'status' => 500,
+                'message' => 'Fail',
+                'error' => $e->getMessage(),
             ], 500);
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function createProduct(Request $request)
-    {
-        //
+    public function createProduct(CreateProductRequest $request) {
+        $loginInfo = $this->checkAdminLogin();
+
+        if (!$loginInfo['isAdmin']) {
+            return response()->json(['status' => 403, 'message' => 'Unauthorized',], 403);
+        }
+
+        try {
+            $product = new Product;
+            $product->id = Str::uuid()->toString();
+            $product->name = $request->name;
+            $product->description = $request->description;
+            $product->price = $request->price;
+            $product->category = $request->category;
+            $product->gender = $request->gender;
+            $product->discount_rate = $request->discountRate;
+            $product->tax_rate = $request->taxRate;
+            $product->inventory_count = $request->inventoryCount;
+            $product->image_url = $request->imageUrl;
+            $product->is_active = true;
+            $product->created_by = $loginInfo['userId'];
+            $product->save();
+
+            return response()->json(['status' => 200, 'message' => 'Success',], 200);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return response()->json([
+                'status' => 500,
+                'message' => 'Fail',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+    
+    public function updateProduct(UpdateProductRequest $request) {
+        $loginInfo = $this->checkAdminLogin();
+
+        if (!$loginInfo['isAdmin']) {
+            return response()->json(['status' => 403, 'message' => 'Unauthorized',], 403);
+        }
+
+        $product = Product::where('id', $request->id)->first();
+
+        if (!$product) {
+            return response()->json(['status' => 404, 'message' => 'Product not found',], 404);
+        }
+
+        try {
+            $product->name = $request->name;
+            $product->description = $request->description;
+            $product->price = $request->price;
+            $product->category = $request->category;
+            $product->gender = $request->gender;
+            $product->discount_rate = $request->discountRate;
+            $product->tax_rate = $request->taxRate;
+            $product->inventory_count = $request->inventoryCount;
+            $product->image_url = $request->imageUrl;
+            $product->is_active = $request->isActive;
+            $product->updated_by = $loginInfo['userId'];
+            $product->save();
+
+            return response()->json(['status' => 200, 'message' => 'Success',], 200);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return response()->json([
+                'status' => 500,
+                'message' => 'Fail',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function updateProduct(Request $request, string $id)
-    {
-        //
-    }
+    private function checkAdminLogin() {
+        try {
+            $payload = JWTAuth::parseToken()->getPayload();
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function deleteProduct(string $id)
-    {
-        //
+            if (!$payload) {
+                return response()->json(['status' => 500, 'message' => 'Invalid token'], 500);
+            }
+
+            return [
+                'isAdmin' => $payload->get('role') === 'admin',
+                'userId' => $payload->get('user_id'),
+            ];
+        } catch (\Exception $e) {
+            Log::error($e);
+            return response()->json([
+                'status' => 500,
+                'message' => 'Fail',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

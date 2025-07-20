@@ -14,24 +14,25 @@ class ProductsSeeder extends Seeder
      */
     public function run(): void
     {
-        $product = new Product;
-        // $product->id = Str::uuid()->toString();
-        $product->id = '74789b18-7717-4617-aa2d-42fa113857ce'; // ID sản phẩm, có thể thay đổi nếu cần
-        $product->name = 'Product 1';
-        $product->description = 'hot';
-        $product->price = 50.00; // Giá sản phẩm
-        $product->category = 'shoes'; // Danh mục sản phẩm
-        $product->gender = 'unisex'; // Giới tính sản phẩm
-        $product->discount_rate = 0; // Tỷ lệ giảm giá 0%
-        $product->tax_rate = 10; // Tỷ lệ thuế 10%
-        $product->inventory_count = 50; // Số lượng tồn kho
-        $product->image_url = 'https://example.com/image1.jpg'; // URL hình ảnh sản phẩm
-        $product->created_at = now(); // Thời gian tạo
-        $product->created_by = '18e00d22-0eb6-4005-9589-5ddcae1986b3';
-        $product->is_active = true; // Sản phẩm đang hoạt động
-        $product->updated_at = now(); // Thời gian cập nhật
-        $product->deleted_at = null; // Chưa xóa
-        $product->deleted_by = null; // Chưa xóa
-        $product->save();
+        for ($i = 1; $i <= 10; $i++) {
+            $product = new Product;
+            $product->id = Str::uuid()->toString();
+            $product->name = "Product $i";
+            $product->description = "Description for product $i";
+            $product->price = rand(10, 100);
+            $product->category = 'shoes';
+            $product->gender = 'unisex';
+            $product->discount_rate = rand(0, 30);
+            $product->tax_rate = 10;
+            $product->inventory_count = rand(10, 100);
+            $product->image_url = "https://example.com/image$i.jpg";
+            $product->created_at = now();
+            $product->created_by = '18e00d22-0eb6-4005-9589-5ddcae1986b3';
+            $product->is_active = true;
+            $product->updated_at = now();
+            $product->deleted_at = null;
+            $product->deleted_by = null;
+            $product->save();
+        }
     }
 }
