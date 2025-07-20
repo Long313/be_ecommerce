@@ -46,8 +46,12 @@ Route::delete('user', [UserController::class, 'deleteUser'])->summary('Delete an
 
 
 #/ Define API routes for ProductController
-Route::get('product', [ProductController::class, 'getProducts'])->summary('Get products');
-Route::get('product/{id}', [ProductController::class, 'getProductById'])->summary('Get product by ID');
-Route::post('product', [ProductController::class, 'createProduct'])->summary('Create a new product');
-Route::put('product', [ProductController::class, 'updateProduct'])->summary('Update a product');
-Route::delete('product', [ProductController::class, 'deleteProduct'])->summary('Delete a product');
+Route::group([
+    'middleware' => 'api',
+    'prefix' => 'product'
+], function ($router) {
+    Route::get('', [ProductController::class, 'getProducts'])->summary('Get products with pagination');
+    Route::get('{id}', [ProductController::class, 'getProductById'])->summary('Get product by ID');
+    Route::post('create', [ProductController::class, 'createProduct'])->summary('Create a new product');
+    Route::put('update', [ProductController::class, 'updateProduct'])->summary('Update a product');
+});
