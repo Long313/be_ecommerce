@@ -11,7 +11,7 @@ use G4T\Swagger\Attributes\SwaggerSection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Tymon\JWTAuth\Facades\JWTAuth;
-
+use Illuminate\Support\Facades\Storage;
 
 
 #[SwaggerSection('APIs for Products')]
@@ -103,6 +103,8 @@ class ProductController extends Controller
             return response()->json(['status' => 403, 'message' => 'Unauthorized',], 403);
         }
 
+        $imageUrl = $this->uploadImage($request);
+
         try {
             $product = new Product;
             $product->id = Str::uuid()->toString();
@@ -114,7 +116,7 @@ class ProductController extends Controller
             $product->discount_rate = $request->discountRate;
             $product->tax_rate = $request->taxRate;
             $product->inventory_count = $request->inventoryCount;
-            $product->image_url = $request->imageUrl;
+            $product->image_url = $imageUrl;
             $product->is_active = true;
             $product->created_by = $loginInfo['userId'];
             $product->save();
@@ -143,6 +145,8 @@ class ProductController extends Controller
             return response()->json(['status' => 404, 'message' => 'Product not found',], 404);
         }
 
+        $imageUrl = $this->uploadImage($request);
+
         try {
             $product->name = $request->name;
             $product->description = $request->description;
@@ -152,7 +156,7 @@ class ProductController extends Controller
             $product->discount_rate = $request->discountRate;
             $product->tax_rate = $request->taxRate;
             $product->inventory_count = $request->inventoryCount;
-            $product->image_url = $request->imageUrl;
+            $product->image_url = $imageUrl;
             $product->is_active = $request->isActive;
             $product->updated_by = $loginInfo['userId'];
             $product->save();
@@ -222,6 +226,24 @@ class ProductController extends Controller
                 'message' => 'Fail',
                 'error' => $e->getMessage(),
             ], 500);
+        }
+    }
+
+    private function uploadImage($request) {
+        try {
+            $imageName = Str::random(32).".".$request->image->getClientOriginalExtension();
+     
+            Storage::disk('public')->put($imageName, file_get_contents($request->image));
+
+            $url = asset('storage/' . $imageName);
+
+            return $url;
+        } catch (\Exception $e) {
+            Log::error($e);
+            return response()->json([
+                'status' => 500,
+                'message' => "Upload image error"
+            ],500);
         }
     }
 }
