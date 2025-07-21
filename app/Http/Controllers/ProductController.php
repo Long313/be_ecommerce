@@ -20,6 +20,10 @@ class ProductController extends Controller
     public function getProducts(Request $request) {
         try {
             $search = $request->query('search', '');
+            $gender = $request->query('gender', '');
+            $category = $request->query('category', '');
+            $startPrice = $request->query('startPrice', '');
+            $endPrice = $request->query('endPrice', '');
             $pageSize = $request->query('pageSize', 5);
             $pageIndex = $request->query('pageIndex', 1);
             $sortOrder = $request->query('sort', 'desc');
@@ -33,6 +37,22 @@ class ProductController extends Controller
                 });
             }
 
+            if ($gender) {
+                $query->where('gender', $gender);
+            }
+
+            if ($category) {
+                $query->where('category', $category);
+            }
+
+            if (is_numeric($startPrice)) {
+                $query->where('price', '>=', $startPrice);
+            }
+
+            if (is_numeric($endPrice)) {
+                $query->where('price', '<=', $endPrice);
+            }
+            
             $query->orderBy('created_at', $sortOrder);
 
             $products = $query->paginate($pageSize, ['*'], 'page', $pageIndex);
