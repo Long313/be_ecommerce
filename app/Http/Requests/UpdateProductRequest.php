@@ -23,7 +23,7 @@ class UpdateProductRequest extends FormRequest
             'discountRate' => 'required|numeric',
             'taxRate' => 'required|numeric',
             'inventoryCount' => 'integer|min:0',
-            'imageUrl' => 'nullable ',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'isActive' => 'required|boolean'
         ];
     }
@@ -49,7 +49,7 @@ class UpdateProductRequest extends FormRequest
             'discountRate' => 'Discount rate',
             'taxRate' => 'Tax rate',
             'inventoryCount' => 'Inventory count',
-            'imageUrl' => 'Image URL',
+            'image' => 'Image',
             'isActive' => 'Is active'
         ];
     }
