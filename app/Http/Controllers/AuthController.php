@@ -50,7 +50,7 @@ class AuthController extends Controller
 
         $user->save();
         
-        return $this->respondWithToken($token, $refreshToken);
+        return $this->respondWithToken($user, $token, $refreshToken);
     }
 
     
@@ -133,7 +133,7 @@ class AuthController extends Controller
             $user->refresh_token = $newRefreshToken;
             $user->save();
 
-            return $this->respondWithToken($newAccessToken, $newRefreshToken);
+            return $this->respondWithToken($user, $newAccessToken, $newRefreshToken);
         } catch (JWTException $e) {
             Log::error($e);
             return response()->json(['status' => 500, 'message' => 'Refresh Token Invalid'], 500);
@@ -147,7 +147,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    private function respondWithToken($token, $refreshToken)
+    private function respondWithToken($user, $token, $refreshToken)
     {
         $accessCookie = cookie(
             'access_token', $token, 60, null, null, true, true, false, 'Strict'
@@ -157,8 +157,18 @@ class AuthController extends Controller
             'refresh_token', $refreshToken, 60 * 24 * 7, null, null, true, true, false, 'Strict'
         );
 
+        $data = new User;
+        $data->id = $user->id;
+        $data->fullname = $user->fullname;
+        $data->email = $user->email;
+        $data->phone_number = $user->phone_number;
+        $data->gender = $user->gender;
+        $data->role = $user->role;
+        $data->status = $user->status;
+
         return response()->json([
             'status' => 200,
+            'data' => $data,
             'message' => 'Success'
         ], 200)->withCookie($accessCookie)->withCookie($refreshCookie);
     }
