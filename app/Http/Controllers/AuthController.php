@@ -150,11 +150,13 @@ class AuthController extends Controller
     private function respondWithToken($user, $token, $refreshToken)
     {
         $accessCookie = cookie(
-            'access_token', $token, 60, null, null, true, true, false, 'Strict'
+            // 'access_token', $token, 60, null, null, true, true, false, 'Strict'
+                'access_token', $token, 60, '/', null, false, false, false, 'Lax'
         );
         
         $refreshCookie = cookie(
-            'refresh_token', $refreshToken, 60 * 24 * 7, null, null, true, true, false, 'Strict'
+            // 'refresh_token', $refreshToken, 60 * 24 * 7, null, null, true, true, false, 'Strict'
+                'refresh_token', $refreshToken, 60 * 24 * 7, '/', null, false, false, false, 'Lax'
         );
 
         $data = new User;
