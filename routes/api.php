@@ -41,7 +41,7 @@ Route::post('user/reset-password', [UserController::class, 'resetPassword'])->su
 Route::post('user/verify-otp-register', [UserController::class, 'verifyOtpToRegister'])->summary('Verify OTP to complete registration');
 Route::post('user/verify-otp-reset', [UserController::class, 'verifyOtpToResetPassword'])->summary('Verify OTP to reset password');
 Route::post('user/resend-otp', [UserController::class, 'resendOtp'])->summary('Resend OTP email');
-Route::put('user', [UserController::class, 'updateUser'])->summary('Update an user');
+Route::post('user', [UserController::class, 'updateUserProfile'])->summary('Update user profile');
 Route::delete('user', [UserController::class, 'deleteUser'])->summary('Delete an user');
 
 

@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('phone_number', 20)->unique();
             $table->string('password');
             $table->enum('gender', ['men', 'women', 'unisex'])->default('unisex');
+            $table->timestamp('birthday')->nullable();
+            $table->string('address')->nullable();
+            $table->string('avatar_url')->nullable();
             $table->enum('role', ['admin', 'customer']);
             $table->string('status');
             $table->string('refresh_token');

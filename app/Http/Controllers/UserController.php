@@ -16,8 +16,11 @@ use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\VerifyOtpRequest;
 use App\Http\Requests\ResendOtpRequest;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\UpdateUserProfileRequest;
 use App\Mail\OtpEmailToResetPassword;
 use G4T\Swagger\Attributes\SwaggerSection;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Storage;
 
 #[SwaggerSection('APIs for Users')]
 class UserController extends Controller
@@ -112,9 +115,41 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function updateUser(Request $request, string $id)
+    public function updateUserProfile(UpdateUserProfileRequest $request)
     {
-        //
+        try {
+            $payload = JWTAuth::parseToken()->getPayload();
+            if (!$payload) {
+                return response()->json(['status' => 500, 'message' => 'Invalid token'], 500);
+            }
+
+            $existUser = User::where('id', $payload['user_id'])->where('status', 'active')->first();
+            if (!$existUser) {
+                return response()->json(['status' => 404, 'message' => 'User not found'], 404);
+            }
+
+            $avatarUrl = '';
+
+            if($request->avatar) {
+                $avatarUrl = $this->uploadAvatar($request);
+            }
+
+            $existUser->fullname = $request->fullname;
+            $existUser->gender = $request->gender;
+            $existUser->birthday = $request->birthday;
+            $existUser->address = $request->address;
+            $existUser->avatar_url = $avatarUrl;
+            $existUser->save();
+
+            return response()->json(['status' => 200, 'message' => 'Success',], 200);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return response()->json([
+                'status' => 500,
+                'message' => 'Fail',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
@@ -341,6 +376,24 @@ class UserController extends Controller
             }
         } catch (\Exception $e) {
             Log::error($e);
+        }
+    }
+
+    private function uploadAvatar($request) {
+        try {
+            $imageName = Str::random(32).".".$request->avatar->getClientOriginalExtension();
+     
+            Storage::disk('public')->put($imageName, file_get_contents($request->avatar));
+
+            $url = asset('storage/' . $imageName);
+
+            return $url;
+        } catch (\Exception $e) {
+            Log::error($e);
+            return response()->json([
+                'status' => 500,
+                'message' => "Upload image error"
+            ],500);
         }
     }
 }

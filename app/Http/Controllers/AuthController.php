@@ -165,6 +165,9 @@ class AuthController extends Controller
         $data->email = $user->email;
         $data->phone_number = $user->phone_number;
         $data->gender = $user->gender;
+        $data->birthday = $user->birthday;
+        $data->address = $user->address;
+        $data->avatar_url = $user->avatar_url;
         $data->role = $user->role;
         $data->status = $user->status;
 
