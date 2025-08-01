@@ -23,6 +23,7 @@ return new class extends Migration
             $table->bigInteger('inventory_count')->unsigned();
             $table->string('image_url')->nullable();
             $table->integer('star')->default(0);
+            $table->string('type');
             $table->boolean('is_active')->default(true);
             $table->timestamp('created_at')->nullable();
             $table->uuid('created_by')->nullable();
