@@ -23,7 +23,8 @@ class CreateProductRequest extends FormRequest
             'taxRate' => 'required|numeric',
             'inventoryCount' => 'integer|min:0',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'star' => 'required|integer|min:0|max:5'
+            'star' => 'required|integer|min:0|max:5',
+            'type' => 'nullable'
         ];
     }
 
@@ -50,7 +51,8 @@ class CreateProductRequest extends FormRequest
             'taxRate' => 'Tax rate',
             'inventoryCount' => 'Inventory count',
             'image' => 'Image',
-            'star' => 'Star'
+            'star' => 'Star',
+            'type' => 'Type'
         ];
     }
 }

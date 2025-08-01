@@ -25,6 +25,7 @@ class UpdateProductRequest extends FormRequest
             'inventoryCount' => 'integer|min:0',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'star' => 'required|integer|min:0|max:5',
+            'type' => 'nullable',
             'isActive' => 'required|boolean'
         ];
     }
@@ -54,6 +55,7 @@ class UpdateProductRequest extends FormRequest
             'inventoryCount' => 'Inventory count',
             'image' => 'Image',
             'star' => 'Star',
+            'type' => 'Type',
             'isActive' => 'Is active'
         ];
     }

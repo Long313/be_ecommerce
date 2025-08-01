@@ -27,6 +27,7 @@ class Product extends Model
         'inventory_count',
         'image_url',
         'star',
+        'type',
         'is_active',
         'created_by',
         'updated_by',

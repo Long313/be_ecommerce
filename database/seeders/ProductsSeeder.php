@@ -14,11 +14,11 @@ class ProductsSeeder extends Seeder
      */
     public function run(): void
     {
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 1; $i <= 20; $i++) {
             $product = new Product;
             $product->id = Str::uuid()->toString();
             $product->name = "Product $i";
-            $product->description = $i % 2 === 0 ? "hot" : "new";
+            $product->description = "Description for product $i";
             $product->price = rand(10, 100);
             $product->category = 'shoes';
             $product->gender = 'unisex';
@@ -27,6 +27,7 @@ class ProductsSeeder extends Seeder
             $product->inventory_count = rand(10, 100);
             $product->image_url = '';
             $product->star = $i % 6;
+            $product->type = $i % 2 === 0 ? "hot" : "new";
             $product->created_at = now();
             $product->created_by = '18e00d22-0eb6-4005-9589-5ddcae1986b3';
             $product->is_active = true;
