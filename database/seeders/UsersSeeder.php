@@ -24,6 +24,9 @@ class UsersSeeder extends Seeder
         $user->role = 'admin';
         $user->status = 'active';
         $user->gender = 'unisex';
+        $user->birthday = now();
+        $user->address = '123 đường 456';
+        $user->avatar_url = '';
         $user->refresh_token = ''; // Tạo refresh token ngẫu nhiên
         $user->created_at = now();
         $user->created_by = '18e00d22-0eb6-4005-9589-5ddcae1986b3'; // Giả sử người tạo là chính mình
