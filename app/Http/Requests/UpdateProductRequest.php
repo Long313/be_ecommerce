@@ -16,7 +16,7 @@ class UpdateProductRequest extends FormRequest
         return [
             'id' => 'required',
             'name' => 'required',
-            'description' => 'nullable ',
+            'description' => 'nullable',
             'price' => 'required|numeric|min:0.01',
             'category' => 'required',
             'gender' => 'required',
@@ -24,6 +24,7 @@ class UpdateProductRequest extends FormRequest
             'taxRate' => 'required|numeric',
             'inventoryCount' => 'integer|min:0',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'star' => 'required|integer|min:0|max:5',
             'isActive' => 'required|boolean'
         ];
     }
@@ -34,7 +35,9 @@ class UpdateProductRequest extends FormRequest
             'required' => ':attribute must be filled',
             'numeric' => ':attribute must be number',
             'integer' => ':attribute must be integer',
-            'boolean' => ':attribute must be boolean'
+            'boolean' => ':attribute must be boolean',
+            'min' => ':attribute minimum :min',
+            'max' => ':attribute maximum :max'
         ];
     }
 
@@ -50,6 +53,7 @@ class UpdateProductRequest extends FormRequest
             'taxRate' => 'Tax rate',
             'inventoryCount' => 'Inventory count',
             'image' => 'Image',
+            'star' => 'Star',
             'isActive' => 'Is active'
         ];
     }

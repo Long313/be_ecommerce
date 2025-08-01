@@ -18,14 +18,15 @@ class ProductsSeeder extends Seeder
             $product = new Product;
             $product->id = Str::uuid()->toString();
             $product->name = "Product $i";
-            $product->description = "Description for product $i";
+            $product->description = $i % 2 === 0 ? "hot" : "new";
             $product->price = rand(10, 100);
             $product->category = 'shoes';
             $product->gender = 'unisex';
             $product->discount_rate = rand(0, 30);
             $product->tax_rate = 10;
             $product->inventory_count = rand(10, 100);
-            $product->image_url = "https://example.com/image$i.jpg";
+            $product->image_url = '';
+            $product->star = $i % 6;
             $product->created_at = now();
             $product->created_by = '18e00d22-0eb6-4005-9589-5ddcae1986b3';
             $product->is_active = true;

@@ -117,6 +117,7 @@ class ProductController extends Controller
             $product->tax_rate = $request->taxRate;
             $product->inventory_count = $request->inventoryCount;
             $product->image_url = $imageUrl;
+            $product->star = $request->star;
             $product->is_active = true;
             $product->created_by = $loginInfo['userId'];
             $product->save();
@@ -157,6 +158,7 @@ class ProductController extends Controller
             $product->tax_rate = $request->taxRate;
             $product->inventory_count = $request->inventoryCount;
             $product->image_url = $imageUrl;
+            $product->star = $request->star;
             $product->is_active = $request->isActive;
             $product->updated_by = $loginInfo['userId'];
             $product->save();
