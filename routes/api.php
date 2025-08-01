@@ -53,6 +53,6 @@ Route::group([
     Route::get('', [ProductController::class, 'getProducts'])->summary('Get products with pagination');
     Route::get('{id}', [ProductController::class, 'getProductById'])->summary('Get product by ID');
     Route::post('create', [ProductController::class, 'createProduct'])->summary('Create a new product');
-    Route::put('update', [ProductController::class, 'updateProduct'])->summary('Update a product');
+    Route::post('update', [ProductController::class, 'updateProduct'])->summary('Update a product');
     Route::delete('{id}', [ProductController::class, 'deleteProduct'])->summary('Delete an unused product');
 });

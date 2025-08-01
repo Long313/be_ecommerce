@@ -21,7 +21,8 @@ return new class extends Migration
             $table->integer('discount_rate')->unsigned()->default(0);
             $table->integer('tax_rate')->unsigned()->default(10);
             $table->bigInteger('inventory_count')->unsigned();
-            $table->string('image_url');
+            $table->string('image_url')->nullable();
+            $table->integer('star')->default(0);
             $table->boolean('is_active')->default(true);
             $table->timestamp('created_at')->nullable();
             $table->uuid('created_by')->nullable();

@@ -26,6 +26,7 @@ class Product extends Model
         'tax_rate',
         'inventory_count',
         'image_url',
+        'star',
         'is_active',
         'created_by',
         'updated_by',

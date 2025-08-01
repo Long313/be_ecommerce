@@ -15,7 +15,7 @@ class CreateProductRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'description' => 'nullable ',
+            'description' => 'nullable',
             'price' => 'required|numeric|min:0.01',
             'category' => 'required',
             'gender' => 'required',
@@ -23,6 +23,7 @@ class CreateProductRequest extends FormRequest
             'taxRate' => 'required|numeric',
             'inventoryCount' => 'integer|min:0',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'star' => 'required|integer|min:0|max:5'
         ];
     }
 
@@ -32,6 +33,8 @@ class CreateProductRequest extends FormRequest
             'required' => ':attribute must be filled',
             'numeric' => ':attribute must be number',
             'integer' => ':attribute must be integer',
+            'min' => ':attribute minimum :min',
+            'max' => ':attribute maximum :max'
         ];
     }
 
@@ -47,6 +50,7 @@ class CreateProductRequest extends FormRequest
             'taxRate' => 'Tax rate',
             'inventoryCount' => 'Inventory count',
             'image' => 'Image',
+            'star' => 'Star'
         ];
     }
 }
