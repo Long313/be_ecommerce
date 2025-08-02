@@ -23,6 +23,7 @@ class UpdateUserProfileRequest extends FormRequest
     {
         return [
             'fullname' => 'required|string|max:100',
+            'phoneNumber' => 'required|max:20',
             'gender' => 'required|string|max:10',
             'birthday' => 'nullable|date',
             'address' => 'nullable|string',
@@ -33,7 +34,11 @@ class UpdateUserProfileRequest extends FormRequest
     public function messages()
     {
         return [
+            'required' => ':attribute must be filled',
             'max' => ':attribute maximum :max characters',
+            'string' => ':attribute must be string',
+            'date' => ':attribute must be date format',
+            'image' => ':attribute must be image format'
         ];
     }
 
@@ -41,6 +46,7 @@ class UpdateUserProfileRequest extends FormRequest
     {
         return [
             'fullname' => 'Fullname',
+            'phoneNumber' => 'Phone number',
             'gender' => 'Gender',
             'birthday' => 'Birthday',
             'address' => 'Address',
