@@ -135,6 +135,7 @@ class UserController extends Controller
             }
 
             $existUser->fullname = $request->fullname;
+            $existUser->phone_number = $request->phoneNumber;
             $existUser->gender = $request->gender;
             $existUser->birthday = $request->birthday;
             $existUser->address = $request->address;
