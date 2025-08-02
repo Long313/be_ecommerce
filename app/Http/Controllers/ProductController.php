@@ -20,8 +20,9 @@ class ProductController extends Controller
     public function getProducts(Request $request) {
         try {
             $search = $request->query('search', '');
-            $gender = $request->query('gender', '');
-            $category = $request->query('category', '');
+            $genders = $request->query('gender', []);
+            $categories = $request->query('category', []);
+            $type = $request->query('type', '');
             $startPrice = $request->query('startPrice', '');
             $endPrice = $request->query('endPrice', '');
             $pageSize = $request->query('pageSize', 5);
@@ -37,12 +38,16 @@ class ProductController extends Controller
                 });
             }
 
-            if ($gender) {
-                $query->where('gender', $gender);
+            if (!empty($genders)) {
+                $query->whereIn('gender', (array) $genders);
             }
 
-            if ($category) {
-                $query->where('category', $category);
+            if (!empty($categories)) {
+                $query->whereIn('category', (array) $categories);
+            }
+
+            if ($type) {
+                $query->where('type', $type);
             }
 
             if (is_numeric($startPrice)) {
