@@ -27,7 +27,8 @@ class ProductController extends Controller
             $endPrice = $request->query('endPrice', '');
             $pageSize = $request->query('pageSize', 5);
             $pageIndex = $request->query('pageIndex', 1);
-            $sortOrder = $request->query('sort', 'desc');
+            $sortField = $request->query('sortField', 'updated_at');
+            $sortOrder = $request->query('sortOrder', 'desc');
 
             $query = Product::query();
 
@@ -58,7 +59,7 @@ class ProductController extends Controller
                 $query->where('price', '<=', $endPrice);
             }
             
-            $query->orderBy('created_at', $sortOrder);
+            $query->orderBy($sortField, $sortOrder);
 
             $products = $query->paginate($pageSize, ['*'], 'page', $pageIndex);
 
