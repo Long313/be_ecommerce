@@ -153,7 +153,9 @@ class ProductController extends Controller
             return response()->json(['status' => 404, 'message' => 'Product not found',], 404);
         }
 
-        $imageUrl = $this->uploadImage($request);
+        if ($request->image) {
+            $product->image_url = $this->uploadImage($request);
+        }
 
         try {
             $product->name = $request->name;
@@ -164,7 +166,6 @@ class ProductController extends Controller
             $product->discount_rate = $request->discountRate;
             $product->tax_rate = $request->taxRate;
             $product->inventory_count = $request->inventoryCount;
-            $product->image_url = $imageUrl;
             $product->star = $request->star;
             $product->type = $request->type;
             $product->is_active = $request->isActive;
@@ -245,7 +246,9 @@ class ProductController extends Controller
      
             Storage::disk('public')->put($imageName, file_get_contents($request->image));
 
-            $url = asset('storage/' . $imageName);
+            $appUrl = env("SWAGGER_URL_API");
+
+            $url = asset("$appUrl/storage/" . $imageName);
 
             return $url;
         } catch (\Exception $e) {
