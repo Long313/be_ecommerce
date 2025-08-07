@@ -23,7 +23,7 @@ class UpdateProductRequest extends FormRequest
             'discountRate' => 'required|numeric',
             'taxRate' => 'required|numeric',
             'inventoryCount' => 'integer|min:0',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'star' => 'required|integer|min:0|max:5',
             'type' => 'nullable',
             'isActive' => 'required|boolean'

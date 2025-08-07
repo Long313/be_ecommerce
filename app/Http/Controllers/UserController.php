@@ -128,10 +128,8 @@ class UserController extends Controller
                 return response()->json(['status' => 404, 'message' => 'User not found'], 404);
             }
 
-            $avatarUrl = '';
-
-            if($request->avatar) {
-                $avatarUrl = $this->uploadAvatar($request);
+            if ($request->avatar) {
+                $existUser->avatar_url = $this->uploadAvatar($request);
             }
 
             $existUser->fullname = $request->fullname;
@@ -139,7 +137,6 @@ class UserController extends Controller
             $existUser->gender = $request->gender;
             $existUser->birthday = $request->birthday;
             $existUser->address = $request->address;
-            $existUser->avatar_url = $avatarUrl;
             $existUser->save();
 
             return response()->json(['status' => 200, 'message' => 'Success',], 200);
@@ -386,7 +383,9 @@ class UserController extends Controller
      
             Storage::disk('public')->put($imageName, file_get_contents($request->avatar));
 
-            $url = asset('storage/' . $imageName);
+            $appUrl = env("SWAGGER_URL_API");
+
+            $url = asset("$appUrl/storage/" . $imageName);
 
             return $url;
         } catch (\Exception $e) {
