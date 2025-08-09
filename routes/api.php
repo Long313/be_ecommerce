@@ -36,6 +36,7 @@ Route::group([
 Route::get('user', [UserController::class, 'getUsers'])->summary('Get users');
 Route::get('user/{id}', [UserController::class, 'getUserById'])->summary('Get user by ID');
 Route::post('user/customer', [UserController::class, 'createCustomerUser'])->summary('Create a new user (customer)');
+Route::post('user/change-password', [UserController::class, 'changePassword'])->summary('Change password');
 Route::post('user/forgot-password', [UserController::class, 'forgotPassword'])->summary('Forgot password');
 Route::post('user/reset-password', [UserController::class, 'resetPassword'])->summary('Reset password');
 Route::post('user/verify-otp-register', [UserController::class, 'verifyOtpToRegister'])->summary('Verify OTP to complete registration');
