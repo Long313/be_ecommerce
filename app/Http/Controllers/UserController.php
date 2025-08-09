@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use App\Mail\OtpEmailToRegister;
 use App\Http\Requests\CreateUserRequest;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\VerifyOtpRequest;
 use App\Http\Requests\ResendOtpRequest;
@@ -186,6 +187,36 @@ class UserController extends Controller
             return response()->json(['status' => 500, 'message' => 'Fail',], 500);
         }
          
+    }
+
+    public function changePassword(ChangePasswordRequest $request) {
+        try {
+            $payload = JWTAuth::parseToken()->getPayload();
+            if (!$payload) {
+                return response()->json(['status' => 500, 'message' => 'Invalid token'], 500);
+            }
+
+            $existUser = User::where('id', $payload['user_id'])->where('status', 'active')->first();
+            if (!$existUser) {
+                return response()->json(['status' => 404, 'message' => 'User not found'], 404);
+            }
+
+            if (!Hash::check($request->currentPassword, $existUser->password)) {
+                return response()->json(['status' => 400, 'message' => 'Wrong credentials',], 400);
+            }
+
+            $existUser->password = Hash::make($request->newPassword);
+            $existUser->save();
+
+            return response()->json(['status' => 200, 'message' => 'Change password successfully',], 200);
+        } catch (\Exception $e) {
+            Log::error($e);
+            return response()->json([
+                'status' => 500,
+                'message' => 'Fail',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function forgotPassword(ForgotPasswordRequest $request) {
